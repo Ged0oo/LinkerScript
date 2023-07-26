@@ -1,0 +1,86 @@
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x22000000         0x00005000         xrw
+FLASH            0x08000000         0x00010000         rw
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+
+.text           0x08000000       0x28
+                0x08000000                _textStart = .
+                0x08000000                . = ALIGN (0x4)
+ *(.text)
+ .text          0x08000000       0x14 main.o
+                0x08000000                main
+ .text          0x08000014       0x14 file1.o
+                0x08000014                swapping
+ *(.text*)
+                0x08000028                . = ALIGN (0x4)
+                0x08000028                _textEnd = .
+
+.glue_7         0x08000028        0x0
+ .glue_7        0x08000028        0x0 linker stubs
+
+.glue_7t        0x08000028        0x0
+ .glue_7t       0x08000028        0x0 linker stubs
+
+.vfp11_veneer   0x08000028        0x0
+ .vfp11_veneer  0x08000028        0x0 linker stubs
+
+.v4_bx          0x08000028        0x0
+ .v4_bx         0x08000028        0x0 linker stubs
+
+.rodata         0x08000028        0xc
+                0x08000028                _rodataStart = .
+                0x08000028                . = ALIGN (0x4)
+ *(.rodata)
+ .rodata        0x08000028        0x4 main.o
+                0x08000028                varTwo
+ .rodata        0x0800002c        0x8 file1.o
+                0x0800002c                numTwo
+                0x08000030                numThree
+ *(.rodata*)
+                0x08000034                . = ALIGN (0x4)
+                0x08000034                _rodataEnd = .
+
+.data           0x22000000       0x10 load address 0x08000034
+                0x22000000                _dataStart = .
+                0x22000000                . = ALIGN (0x4)
+ *(.data)
+ .data          0x22000000        0x8 main.o
+                0x22000000                varOne
+ .data          0x22000008        0x8 file1.o
+                0x22000008                numOne
+ *(.data*)
+                0x22000010                . = ALIGN (0x4)
+                0x22000010                _dataEnd = .
+
+.bss            0x22000010        0x4 load address 0x08000044
+                0x22000010                _bssStart = .
+                0x22000010                . = ALIGN (0x4)
+ *(.bss)
+ .bss           0x22000010        0x4 main.o
+                0x22000010                varThree
+ .bss           0x22000014        0x0 file1.o
+ *(.bss*)
+                0x22000014                . = ALIGN (0x4)
+                0x22000014                _bssEnd = .
+LOAD main.o
+LOAD file1.o
+OUTPUT(app.elf elf32-littlearm)
+LOAD linker stubs
+
+.comment        0x00000000       0x4d
+ .comment       0x00000000       0x4d main.o
+                                 0x4e (size before relaxing)
+ .comment       0x0000004d       0x4e file1.o
+
+.ARM.attributes
+                0x00000000       0x2d
+ .ARM.attributes
+                0x00000000       0x2d main.o
+ .ARM.attributes
+                0x0000002d       0x2d file1.o
