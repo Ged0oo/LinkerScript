@@ -5,8 +5,11 @@
  * https://www.linkedin.com/in/mohamednagyofficial/
  * Created on March 20, 2023, 6:41 PM
  */
- 
- 
+
+
+ _stackEnd = ORIGIN(RAM) + LENGTH(RAM);
+
+
  MEMORY
 {
 	RAM		(xrw)	: 	ORIGIN = 0x22000000, LENGTH = 20K
