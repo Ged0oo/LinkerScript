@@ -16,7 +16,7 @@
 
 SECTIONS
 {
-	.isr_Vector :
+	.IsrVector :
 	{
 		. = ALIGN(4);
 		*(.isr_Vector)
